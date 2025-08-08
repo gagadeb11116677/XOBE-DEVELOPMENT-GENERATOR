@@ -1,0 +1,646 @@
+<!doctype html>
+<html lang="id">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+<title>Xobe development Generator Matematika 2025 v1</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#0b0f13;
+    --panel:#0f1720;
+    --muted:#9aa7bd;
+    --gold:#ffd166;
+    --accent:#60a5fa;
+    --glass: rgba(255,255,255,0.03);
+    --success:#6ee7b7;
+    --danger:#fb7185;
+    --radius:14px;
+    --shadow:0 2px 16px rgba(0,0,0,0.12);
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html,body{height:100%;margin:0;font-family:'Poppins',system-ui,Arial;background:
+    radial-gradient(1200px 600px at 10% 10%, rgba(255,209,102,0.03), transparent 8%),
+    linear-gradient(180deg,#051021 0%, #071022 100%);color:#eaf2ff;}
+  body{min-height:100vh;}
+  .app{max-width:1200px;margin:0 auto;padding:0;display:grid;grid-template-columns:260px 1fr;gap:18px;align-items:start;}
+  .sidebar{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);border-radius:var(--radius);padding:18px 12px 18px 18px;border:1px solid rgba(255,255,255,0.03);height:calc(100vh - 32px);position:sticky;top:16px;overflow:auto;transition:transform .3s;}
+  .brand{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+  .logo{width:46px;height:46px;border-radius:10px;background:linear-gradient(135deg,var(--gold),#ffb84d);display:flex;align-items:center;justify-content:center;color:#042135;font-weight:700;box-shadow:var(--shadow);}
+  .brand h2{margin:0;font-size:16px;letter-spacing:0.6px;}
+  .brand p{margin:0;color:var(--muted);font-size:12px;}
+  .nav{margin-top:12px;display:flex;flex-direction:column;gap:6px;}
+  .nav button{background:transparent;border:1px solid transparent;color:var(--muted);text-align:left;padding:12px 10px;font-size:15px;border-radius:10px;cursor:pointer;display:flex;align-items:center;gap:8px;transition:.2s;}
+  .nav button:hover,.nav button.active{background:var(--glass);color:#fff;border-color:rgba(255,255,255,0.08);}
+  .nav button.active{background:linear-gradient(90deg, rgba(255,209,102,0.12), rgba(96,165,250,0.09));color:#fff;}
+  .nav .icon{width:34px;height:34px;border-radius:8px;background:rgba(255,255,255,0.02);display:inline-flex;align-items:center;justify-content:center;color:var(--gold);font-weight:600;}
+  .sidebar .meta{margin-top:14px;color:var(--muted);font-size:13px;}
+  .panel{background:linear-gradient(180deg, rgba(255,255,255,0.02), transparent);border-radius:var(--radius);padding:18px;border:1px solid rgba(255,255,255,0.03);min-height:60vh;box-shadow:var(--shadow);}
+  .topbar{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px;}
+  .topbar .title{font-size:18px;font-weight:600;}
+  .controls{display:flex;gap:8px;align-items:center;flex-wrap:wrap;}
+  select,input[type=number],button{background:transparent;border:1px solid rgba(255,255,255,0.08);padding:10px 12px;border-radius:8px;color:#eaf2ff;font-size:15px;}
+  input[type=number]{width:90px;}
+  button.primary{background:linear-gradient(90deg,var(--gold),#ffb84d);color:#042135;border:none;box-shadow:0 8px 18px rgba(255,184,77,0.06);cursor:pointer;}
+  button.ghost{background:transparent;border:1px solid rgba(255,255,255,0.08);cursor:pointer;}
+  .hint{color:var(--muted);font-size:13px;}
+  .grid{display:grid;grid-template-columns:1fr 360px;gap:14px;align-items:start;}
+  .card{background:rgba(255,255,255,0.02);padding:14px 12px;border-radius:10px;border:1px solid rgba(255,255,255,0.02);box-shadow:var(--shadow);}
+  .problems{max-height:60vh;overflow:auto;display:grid;gap:10px;padding-right:8px;}
+  .prob{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;padding:10px 0;border-radius:10px;background:linear-gradient(180deg, rgba(255,255,255,0.01), transparent);border:1px solid rgba(255,255,255,0.02);}
+  .q{font-size:15px;}
+  .actions{display:flex;flex-direction:column;gap:8px;align-items:flex-end;}
+  .prob input{padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.08);background:#081022;color:#eaf2ff;width:140px;font-size:15px;}
+  .prob .small{font-size:12px;color:var(--muted);margin-top:6px;}
+  .stats{display:flex;gap:12px;align-items:center;}
+  .meter{height:10px;background:rgba(255,255,255,0.03);border-radius:999px;overflow:hidden;width:120px;}
+  .meter i{display:block;height:100%;background:linear-gradient(90deg,#ffd166,#6ee7b7);width:0%;}
+  .solutions{white-space:pre-wrap;font-family:ui-monospace,Menlo,Monaco,monospace;background:rgba(255,255,255,0.02);padding:10px;border-radius:8px;margin-top:10px;color:var(--muted);}
+  .footer{margin-top:12px;text-align:center;color:var(--muted);font-size:13px;}
+  .menu-btn{display:none;position:fixed;top:18px;left:18px;z-index:1001;background:var(--gold);color:#042135;border:none;border-radius:50%;width:44px;height:44px;box-shadow:var(--shadow);align-items:center;justify-content:center;font-size:24px;cursor:pointer;}
+  .sidebar.mobile{position:fixed;left:0;top:0;bottom:0;z-index:1000;transform:translateX(-110%);width:80vw;max-width:320px;height:100vh;transition:transform .3s;}
+  .sidebar.mobile.open{transform:translateX(0);}
+  .sidebar.mobile .brand{margin-top:12px;}
+  .sidebar.mobile .meta{margin-bottom:24px;}
+  .overlay{display:none;position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.25);z-index:999;}
+  .overlay.show{display:block;}
+  @media (max-width:980px){
+    .app{grid-template-columns:1fr;padding:0;}
+    .grid{grid-template-columns:1fr;}
+    .sidebar{display:none;}
+    .sidebar.mobile{display:block;}
+    .menu-btn{display:flex;}
+    .panel{padding:12px;}
+    .card{padding:12px 8px;}
+    .topbar{flex-direction:column;align-items:flex-start;gap:6px;}
+    .controls{gap:6px;}
+    .meter{width:80px;}
+  }
+  @media (max-width:600px){
+    .panel{padding:6px;}
+    .card{padding:8px 4px;}
+    .problems{max-height:40vh;}
+    .logo{width:38px;height:38px;}
+    .brand h2{font-size:14px;}
+    .nav button{font-size:14px;}
+    .q{font-size:13px;}
+    .prob input{width:100px;font-size:13px;}
+  }
+</style>
+</head>
+<body>
+<button class="menu-btn" id="menuBtn" title="Menu">&#9776;</button>
+<div class="overlay" id="overlay"></div>
+<div class="app">
+  <aside class="sidebar" aria-labelledby="brand">
+    <div class="brand" id="brand">
+      <div class="logo">AX</div>
+      <div>
+        <h2> Xobe Development</h2>
+        <p class="small">Generator Matematika 2025 · v1</p>
+      </div>
+    </div>
+
+    <nav class="nav" role="navigation" aria-label="Navigasi topik">
+      <button data-topic="arithmetic" class="active"><span class="icon">1</span> Aritmetika</button>
+      <button data-topic="fractions"><span class="icon">½</span> Pecahan</button>
+      <button data-topic="algebra"><span class="icon">x</span> Aljabar (Linear)</button>
+      <button data-topic="quadratic"><span class="icon">x²</span> Persamaan Kuadrat</button>
+      <button data-topic="geometry"><span class="icon">🔺</span> Geometri</button>
+      <button data-topic="trig"><span class="icon">sin</span> Trigonometri</button>
+      <button data-topic="stats"><span class="icon">σ</span> Statistik</button>
+      <button data-topic="calculus"><span class="icon">d/dx</span> Kalkulus Dasar</button>
+      <button data-topic="number"><span class="icon">→</span> Pola & Bilangan</button>
+      <button data-topic="puzzles"><span class="icon">?</span> Teka-teki</button>
+    </nav>
+
+    <div class="meta">
+      <div class="small">Tip: Pilih topik di atas. Jumlah soal maksimal 1000. Progress tersimpan otomatis.</div>
+    </div>
+  </aside>
+  <aside class="sidebar mobile" id="sidebarMobile" aria-labelledby="brand">
+    <!-- Sidebar mobile, will be cloned from main sidebar -->
+  </aside>
+  <!-- MAIN -->
+  <main class="panel" role="main">
+    <div class="topbar">
+      <div>
+        <div class="title"> Xobe Development Generator Matematika — <span id="topicTitle">Aritmetika</span></div>
+        <div class="hint" id="topicHint">Latihan dasar: operasi hitung acak.</div>
+      </div>
+
+      <div class="controls">
+        <label class="hint">Soal</label>
+        <input id="count" type="number" min="1" max="1000" value="10" aria-label="Jumlah soal"/>
+        <button id="generate" class="primary" title="Generate soal (Ctrl+G)">Generate</button>
+        <button id="check" class="ghost" title="Cek jawaban (Ctrl+Enter)">Cek Semua</button>
+        <button id="showAll" class="ghost">Tunjukkan Solusi</button>
+        <button id="downloadCSV" class="ghost">Unduh CSV</button>
+      </div>
+    </div>
+
+    <div class="grid">
+      <!-- LEFT: problems -->
+      <section>
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div class="small">Daftar Soal</div>
+            <div class="stats">
+              <div class="small">Benar: <strong id="correct">0</strong></div>
+              <div class="small">Salah: <strong id="wrong">0</strong></div>
+              <div class="small">Total: <strong id="total">0</strong></div>
+              <div class="meter" title="Progress"><i id="meter"></i></div>
+            </div>
+          </div>
+
+          <div id="problems" class="problems" aria-live="polite"></div>
+        </div>
+
+        <div class="footer small">Dibuat oleh  Xobe Development · Generator Matematika 2025 v1 — Simpan halaman ini untuk akses offline.</div>
+      </section>
+
+      <!-- RIGHT: controls & solutions -->
+      <aside>
+        <div class="card">
+          <div style="display:flex;justify-content:space-between;align-items:center">
+            <div class="small">Statistik & Progress</div>
+            <div class="small">Auto-save: <strong id="autosave">On</strong></div>
+          </div>
+
+          <div style="margin-top:10px" class="small">Skor keseluruhan: <strong id="score">0%</strong></div>
+          <div style="margin-top:10px">
+            <button id="clearStorage" class="ghost">Hapus Simpanan</button>
+            <button id="reset" class="ghost">Reset Soal</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="small">Preview Solusi / Langkah</div>
+          <div id="solutionPreview" class="solutions">Pilih "Langkah" pada soal untuk melihat penjelasan.</div>
+        </div>
+
+        <div class="card">
+          <div class="small">Kontrol Cepat</div>
+          <div class="small" style="margin-top:8px">Shortcut: <strong>Ctrl+G</strong> generate, <strong>Ctrl+Enter</strong> cek.</div>
+        </div>
+      </aside>
+    </div>
+  </main>
+</div>
+<script>
+/*  Xobe Development Generator Matematika 2025 v1
+   Single-file, sidebar layout, elegant design.
+   Semua fungsi: generate (<=1000), cek, solusi, CSV, autosave.
+*/
+
+// Utilities
+const $ = id => document.getElementById(id);
+const randInt = (a,b) => Math.floor(Math.random()*(b-a+1))+a;
+const approxEqual = (a,b,eps=1e-3) => Math.abs(Number(a)-Number(b))<=eps;
+const escapeHtml = s => String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+// Topic generators (stable & safe)
+function genArithmetic(){
+  const ops = ['+','-','*','/'];
+  const op = ops[randInt(0, ops.length-1)];
+  let a = randInt(1,200), b = randInt(1,200);
+  if(op === '/'){
+    if(Math.random()<0.6){ // make nicer divisions
+      b = randInt(1,20);
+      a = b * randInt(1,12);
+    } else { b = randInt(1,50); }
+  }
+  const expr = `${a} ${op} ${b}`;
+  let ans = null;
+  try { ans = Function('return '+expr)(); } catch(e){ ans = null; }
+  const aR = Number.isFinite(ans) ? Math.round(ans*1000)/1000 : null;
+  return {q: `Hitung: ${expr}`, a: aR, sol: `Langkah: ${expr} = ${aR}`, type:'numeric'};
+}
+
+function genFractions(){
+  const a1 = randInt(1,12), b1 = randInt(1,12), a2 = randInt(1,12), b2 = randInt(1,12);
+  const ops = ['+','-','*','/'];
+  const op = ops[randInt(0,ops.length-1)];
+  const v1 = a1/b1, v2 = a2/b2;
+  let ans;
+  if(op==='+') ans = v1+v2;
+  if(op==='-') ans = v1-v2;
+  if(op==='*') ans = v1*v2;
+  if(op==='/') ans = v1/v2;
+  ans = Math.round(ans*1000)/1000;
+  const q = `Hitung: ${a1}/${b1} ${op} ${a2}/${b2}`;
+  const sol = `Nilai pendek: ${v1} ${op} ${v2} = ${ans} (dapat disederhanakan)`;
+  return {q, a: ans, sol, type:'numeric'};
+}
+
+function genAlgebra(){
+  const a = randInt(1,12);
+  const x = randInt(-12,12);
+  const b = randInt(-20,20);
+  const c = a*x + b;
+  const q = `Selesaikan: ${a}x + (${b}) = ${c}`;
+  const sol = `Langkah:\n${a}x + (${b}) = ${c}\n→ ${a}x = ${c} - (${b}) = ${c - b}\n→ x = ${(c - b)/a}`;
+  return {q, a: x, sol, type:'numeric'};
+}
+
+function genQuadratic(){
+  const r1 = randInt(-10,10), r2 = randInt(-10,10);
+  const a = randInt(1,5);
+  const b = -a*(r1 + r2);
+  const c = a*r1*r2;
+  const q = `Temukan akar: ${a}x^2 + ${b}x + ${c} = 0`;
+  const sol = `Akar: x = ${r1}, ${r2}\n(tersusun dari faktor (x - r1)(x - r2))`;
+  return {q, a:[r1,r2], sol, type:'quadratic_roots'};
+}
+
+function genGeometry(){
+  const shapes = ['square','rectangle','triangle','circle'];
+  const s = shapes[randInt(0, shapes.length-1)];
+  if(s==='square'){
+    const side = randInt(1,30);
+    return {q:`Luas persegi dengan sisi ${side}`, a: side*side, sol:`L = s^2 = ${side}^2 = ${side*side}`, type:'numeric'};
+  }
+  if(s==='rectangle'){
+    const w=randInt(2,30), h=randInt(2,30);
+    return {q:`Luas persegi panjang lebar ${w} tinggi ${h}`, a:w*h, sol:`L = w×h = ${w*h}`, type:'numeric'};
+  }
+  if(s==='triangle'){
+    const b=randInt(2,30), t=randInt(1,30);
+    return {q:`Luas segitiga alas ${b} tinggi ${t}`, a:0.5*b*t, sol:`L = 1/2 × a × t = ${0.5*b*t}`, type:'numeric'};
+  }
+  const r=randInt(1,15); const val = Math.round(Math.PI*r*r*1000)/1000;
+  return {q:`Luas lingkaran jari-jari ${r} (π≈3.1416)`, a:val, sol:`L = π r^2 ≈ 3.1416×${r}^2 = ${val}`, type:'numeric'};
+}
+
+function genTrig(){
+  const angles=[0,30,45,60,90]; const angle=angles[randInt(0,angles.length-1)];
+  const funcs=['sin','cos','tan']; const f=funcs[randInt(0,2)];
+  let val;
+  if(f==='sin'){
+    if(angle===0) val=0; if(angle===30) val=0.5; if(angle===45) val=Math.SQRT2/2; if(angle===60) val=Math.sqrt(3)/2; if(angle===90) val=1;
+  }
+  if(f==='cos'){
+    if(angle===0) val=1; if(angle===30) val=Math.sqrt(3)/2; if(angle===45) val=Math.SQRT2/2; if(angle===60) val=0.5; if(angle===90) val=0;
+  }
+  if(f==='tan'){
+    if(angle===0) val=0; if(angle===30) val=1/Math.sqrt(3); if(angle===45) val=1; if(angle===60) val=Math.sqrt(3); if(angle===90) val=Infinity;
+  }
+  const q = `${f}(${angle}°) = ? (jawab nilai desimal atau akar)`;
+  const sol = `Nilai ${f}(${angle}°) ≈ ${Math.round(val*10000)/10000}`;
+  return {q, a: (Number.isFinite(val)? (Math.round(val*10000)/10000) : val), sol, type:'numeric'};
+}
+
+function genStats(){
+  const n = randInt(5,9);
+  const arr = Array.from({length:n}, ()=>randInt(1,20));
+  const subs = ['mean','median','mode'];
+  const sub = subs[randInt(0,subs.length-1)];
+  let ans;
+  if(sub==='mean') ans = arr.reduce((s,x)=>s+x,0)/arr.length;
+  if(sub==='median'){ const s=arr.slice().sort((a,b)=>a-b); const m=Math.floor(s.length/2); ans = s.length%2? s[m] : (s[m-1]+s[m])/2; }
+  if(sub==='mode'){ const f={}; arr.forEach(x=>f[x]=(f[x]||0)+1); const mx=Math.max(...Object.values(f)); const modes=Object.keys(f).filter(k=>f[k]===mx).map(Number); ans = modes.length===1? modes[0] : modes; }
+  const q = `Data: [${arr.join(', ')}] — Hitung ${sub}.`;
+  const sol = `Jawaban (${sub}): ${Array.isArray(ans)? '['+ans.join(', ')+']' : Math.round(ans*1000)/1000}`;
+  return {q, a: ans, sol, type:'numeric_or_list'};
+}
+
+function genCalculus(){
+  const a=randInt(1,9), n=randInt(1,6);
+  const q = `Turunan f(x) = ${a}x^${n}`;
+  const coef = a*n, pow = n-1;
+  const sol = `f'(x) = ${coef}x^${pow}`;
+  return {q, a: `${coef}x^${pow}`, sol, type:'expression'};
+}
+
+function genNumberPuzzles(){
+  const start=randInt(1,20), diff=randInt(1,10), len=5;
+  const seq = Array.from({length:len}, (_,i)=>start + i*diff);
+  const q = `Deret: ${seq.join(', ')}. Angka selanjutnya?`;
+  const a = start + len*diff;
+  const sol = `Deret bertambah ${diff}. Setelah ${seq[seq.length-1]} → ${a}`;
+  return {q, a, sol, type:'numeric'};
+}
+
+function genPuzzle(){
+  const map = [genNumberPuzzles, genArithmetic, genFractions];
+  return map[randInt(0,map.length-1)]();
+}
+
+const TOPIC_MAP = {
+  arithmetic: genArithmetic,
+  fractions: genFractions,
+  algebra: genAlgebra,
+  quadratic: genQuadratic,
+  geometry: genGeometry,
+  trig: genTrig,
+  stats: genStats,
+  calculus: genCalculus,
+  number: genNumberPuzzles,
+  puzzles: genPuzzle
+};
+
+// App state
+let problems = []; // {id,q,a,sol,type,user,correct}
+const STORAGE_KEY = 'adi_xobe_math_v1';
+
+// DOM refs
+const topicsButtons = document.querySelectorAll('.nav button');
+const topicTitle = $('topicTitle');
+const topicHint = $('topicHint');
+const generateBtn = $('generate');
+const countInput = $('count');
+const problemsEl = $('problems');
+const correctEl = $('correct'), wrongEl = $('wrong'), totalEl = $('total'), scoreEl = $('score') || document.createElement('div');
+const meterEl = $('meter');
+const solutionPreview = $('solutionPreview');
+const autosaveEl = $('autosave');
+
+// current topic
+let currentTopic = 'arithmetic';
+
+// helpers
+function uuid(i){ return Date.now() + '_' + i + '_' + Math.random().toString(36).slice(2,8); }
+
+function setActiveTopic(topic, btnEl){
+  currentTopic = topic;
+  topicsButtons.forEach(b=>b.classList.remove('active'));
+  if(btnEl) btnEl.classList.add('active');
+  topicTitle.textContent = btnEl ? btnEl.textContent.trim() : topic;
+  topicHint.textContent = getTopicHint(topic);
+}
+
+function getTopicHint(topic){
+  const hints = {
+    arithmetic:'Operasi dasar: + - × ÷ — cocok untuk latihan mental.',
+    fractions:'Hitungan pecahan: penjumlahan, pengurangan, perkalian, pembagian pecahan.',
+    algebra:'Persamaan linear dan manipulasi sederhana.',
+    quadratic:'Mengenal akar dan bentuk kuadrat — akan tampil sebagai pasangan akar jika integer.',
+    geometry:'Luas dan keliling: persegi, segitiga, lingkaran, persegi panjang.',
+    trig:'Nilai sinus, cosinus, dan tangen untuk sudut umum (30°,45°,60°).',
+    stats:'Mean, median, dan modus dari sekumpulan data.',
+    calculus:'Turunan polinomial sederhana (ax^n).',
+    number:'Deret & pola sederhana — cari angka selanjutnya.',
+    puzzles:'Teka-teki dan soal campuran untuk melatih logika.'
+  };
+  return hints[topic] || '';
+}
+
+function renderProblems(){
+  problemsEl.innerHTML = '';
+  if(!problems.length){
+    problemsEl.innerHTML = '<div class="small" style="padding:10px;color:var(--muted)">Belum ada soal — klik Generate untuk memulai.</div>';
+    updateTotals();
+    return;
+  }
+  problems.forEach((p, idx)=>{
+    const div = document.createElement('div'); div.className = 'prob';
+    const qdiv = document.createElement('div'); qdiv.className='q';
+    qdiv.innerHTML = `<strong>#${idx+1}</strong> ${escapeHtml(p.q)}`;
+    const actions = document.createElement('div'); actions.className='actions';
+    const inp = document.createElement('input'); inp.type='text'; inp.value = p.user ?? ''; inp.placeholder='Jawaban';
+    inp.addEventListener('input', e=>{ p.user = e.target.value; saveStateDebounced(); });
+    const btnRow = document.createElement('div'); btnRow.style.display='flex'; btnRow.style.gap='6px';
+    const checkBtn = document.createElement('button'); checkBtn.className='ghost'; checkBtn.textContent='Cek';
+    checkBtn.addEventListener('click', ()=> checkSingle(idx));
+    const solBtn = document.createElement('button'); solBtn.className='ghost'; solBtn.textContent='Langkah';
+    solBtn.addEventListener('click', ()=> { solutionPreview.textContent = p.sol; });
+    btnRow.appendChild(checkBtn); btnRow.appendChild(solBtn);
+    const small = document.createElement('div'); small.className='small'; small.textContent = p.correct===true ? '✅ Benar' : (p.correct===false ? '❌ Salah' : '');
+    actions.appendChild(inp); actions.appendChild(btnRow); actions.appendChild(small);
+    div.appendChild(qdiv); div.appendChild(actions);
+    problemsEl.appendChild(div);
+  });
+  updateTotals();
+}
+
+// generate
+function generate(){
+  const topic = currentTopic;
+  const count = Math.max(1, Math.min(1000, Number(countInput.value) || 10));
+  const gen = TOPIC_MAP[topic] || genArithmetic;
+  problems = [];
+  for(let i=0;i<count;i++){
+    try{
+      const item = gen();
+      const id = uuid(i);
+      problems.push({id, q:item.q, a:item.a, sol:item.sol, type:item.type, user:'', correct:null});
+    } catch(e){
+      problems.push({id:uuid(i), q:'(error membuat soal)', a:null, sol:'-', type:'error', user:'', correct:null});
+    }
+  }
+  saveState();
+  renderProblems();
+  $('status') && ($('status').textContent = `Generated ${problems.length} soal`);
+}
+
+// parse answer: handles numbers, fractions a/b, lists "1,2" or "[1,2]"
+function parseAnswer(input){
+  if(input===null||input===undefined) return null;
+  const s = String(input).trim();
+  if(s==='') return null;
+  // list
+  if(/^\[.*\]$/.test(s) || s.indexOf(',')>=0){
+    const list = s.replace(/[\[\]\s]/g,'').split(',').map(x=>Number(x)).filter(x=>!isNaN(x));
+    return list.length? list : s;
+  }
+  // fraction
+  if(s.includes('/')){
+    const parts = s.split('/');
+    if(parts.length===2){ const n = Number(parts[0].trim()), d = Number(parts[1].trim()); if(!isNaN(n) && !isNaN(d) && d!==0) return n/d; }
+  }
+  const num = Number(s);
+  if(!isNaN(num)) return num;
+  return s;
+}
+
+// checking
+function checkSingle(i){
+  const p = problems[i];
+  const user = parseAnswer(p.user);
+  let ok = false;
+  if(p.type==='quadratic_roots'){
+    if(Array.isArray(user) && user.length>=2){
+      const exp = p.a.slice().sort((a,b)=>a-b);
+      const got = user.slice(0,2).map(Number).sort((a,b)=>a-b);
+      if(approxEqual(got[0], exp[0]) && approxEqual(got[1], exp[1])) ok = true;
+    }
+  } else if(Array.isArray(p.a)){
+    if(Array.isArray(user) && user.length===p.a.length && user.every((v,idx)=> approxEqual(v,p.a[idx]) )) ok = true;
+  } else if(typeof p.a === 'number'){
+    if(typeof user === 'number' && approxEqual(user, p.a)) ok = true;
+  } else {
+    // expression or string
+    ok = String(user) === String(p.a);
+  }
+  p.correct = ok;
+  saveStateDebounced();
+  renderProblems();
+  alert(ok ? `Benar!\n\n${p.sol}` : `Salah.\n\nSolusi:\n${p.sol}`);
+}
+
+// check all
+function checkAll(){
+  let c=0,w=0;
+  problems.forEach(p=>{
+    const user = parseAnswer(p.user);
+    let ok=false;
+    if(p.type==='quadratic_roots'){
+      if(Array.isArray(user) && user.length>=2){
+        const exp = p.a.slice().sort((a,b)=>a-b);
+        const got = user.slice(0,2).map(Number).sort((a,b)=>a-b);
+        if(approxEqual(got[0], exp[0]) && approxEqual(got[1], exp[1])) ok = true;
+      }
+    } else if(Array.isArray(p.a)){
+      if(Array.isArray(user) && user.length===p.a.length && user.every((v,idx)=> approxEqual(v,p.a[idx]) )) ok = true;
+    } else if(typeof p.a === 'number'){
+      if(typeof user === 'number' && approxEqual(user, p.a)) ok = true;
+    } else {
+      ok = String(user) === String(p.a);
+    }
+    p.correct = ok;
+    if(ok) c++; else w++;
+  });
+  saveStateDebounced();
+  renderProblems();
+  alert(`Cek selesai.\nBenar: ${c}\nSalah: ${w}`);
+}
+
+// show all solutions
+function showAllSolutions(){
+  if(!problems.length){ solutionPreview.textContent = 'Belum ada soal.'; return; }
+  const txt = problems.map((p,i)=> `#${i+1} ${p.q}\nJawaban: ${Array.isArray(p.a)? '['+p.a.join(', ')+']' : p.a}\nSolusi: ${p.sol}\n`).join('\n');
+  solutionPreview.textContent = txt;
+}
+
+// download CSV
+function downloadCSV(){
+  if(!problems.length){ alert('Belum ada soal untuk diunduh.'); return; }
+  const rows = [['No','Soal','JawabanBenar','JawabanUser','Status']];
+  problems.forEach((p,i)=>{
+    const ans = Array.isArray(p.a)? p.a.join(';') : p.a;
+    const user = p.user ?? '';
+    const st = p.correct===true? 'Benar' : (p.correct===false? 'Salah': 'Belum dicek');
+    rows.push([i+1, p.q, ans, user, st]);
+  });
+  const csv = rows.map(r=> r.map(c=> `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv'});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a'); a.href = url; a.download = 'adi_xobe_soal.csv'; a.click();
+  URL.revokeObjectURL(url);
+}
+
+// totals & UI
+function updateTotals(){
+  const total = problems.length;
+  const correct = problems.filter(p=>p.correct===true).length;
+  const wrong = problems.filter(p=>p.correct===false).length;
+  correctEl.textContent = correct;
+  wrongEl.textContent = wrong;
+  totalEl.textContent = total;
+  const pct = total ? Math.round((correct/total)*100) : 0;
+  if(meterEl) meterEl.style.width = pct + '%';
+  if($('score')) $('score').textContent = pct + '%';
+}
+
+// persistence
+function saveState(){
+  try{
+    const state = {problems, topic:currentTopic, count:countInput.value, time:Date.now()};
+    localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+    autosaveEl.textContent = 'Saved';
+    setTimeout(()=> autosaveEl.textContent = 'On', 700);
+  }catch(e){ console.warn('save failed', e); }
+}
+let saveTimer = null;
+function saveStateDebounced(){ if(saveTimer) clearTimeout(saveTimer); saveTimer = setTimeout(saveState, 400); }
+
+function loadState(){
+  try{
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if(!raw) return false;
+    const st = JSON.parse(raw);
+    if(st.problems && Array.isArray(st.problems) && st.problems.length){
+      problems = st.problems;
+      currentTopic = st.topic || currentTopic;
+      countInput.value = st.count || countInput.value;
+      // set active button
+      topicsButtons.forEach(b=>{ if(b.dataset.topic===currentTopic) b.classList.add('active'); else b.classList.remove('active'); });
+      topicTitle.textContent = document.querySelector(`.nav button[data-topic="${currentTopic}"]`).textContent.trim();
+      renderProblems();
+      return true;
+    }
+  }catch(e){ console.warn('load failed', e); }
+  return false;
+}
+
+// clear storage
+function clearStorage(){
+  if(confirm('Hapus semua data yang tersimpan?')){ localStorage.removeItem(STORAGE_KEY); problems = []; renderProblems(); updateTotals(); solutionPreview.textContent='Pilih "Langkah" pada soal untuk melihat penjelasan.'; }
+}
+
+// reset current problems
+function resetProblems(){
+  if(confirm('Reset soal saat ini?')){ problems = []; renderProblems(); updateTotals(); saveState(); }
+}
+
+// sidebar topic binding
+topicsButtons.forEach(btn=>{
+  btn.addEventListener('click', ()=>{ setActiveTopic(btn.dataset.topic, btn); saveStateDebounced(); });
+});
+
+// UI bindings
+generateBtn.addEventListener('click', generate);
+$('check').addEventListener('click', checkAll);
+$('showAll').addEventListener('click', showAllSolutions);
+$('downloadCSV').addEventListener('click', downloadCSV);
+$('clearStorage').addEventListener('click', clearStorage);
+$('reset').addEventListener('click', resetProblems);
+
+// keyboard shortcuts
+window.addEventListener('keydown', (e)=>{
+  if((e.ctrlKey||e.metaKey) && e.key.toLowerCase()==='g'){ e.preventDefault(); generate(); }
+  if((e.ctrlKey||e.metaKey) && e.key==='Enter'){ e.preventDefault(); checkAll(); }
+});
+
+// Sidebar mobile logic
+const menuBtn = document.getElementById('menuBtn');
+const sidebarMobile = document.getElementById('sidebarMobile');
+const overlay = document.getElementById('overlay');
+const sidebar = document.querySelector('.sidebar:not(.mobile)');
+function openSidebar() {
+  sidebarMobile.innerHTML = sidebar.innerHTML;
+  sidebarMobile.classList.add('open');
+  overlay.classList.add('show');
+}
+function closeSidebar() {
+  sidebarMobile.classList.remove('open');
+  overlay.classList.remove('show');
+}
+menuBtn.onclick = openSidebar;
+overlay.onclick = closeSidebar;
+sidebarMobile.onclick = e => {
+  if (e.target.tagName === 'BUTTON' || e.target.classList.contains('nav')) closeSidebar();
+};
+
+// init
+setActiveTopic('arithmetic', document.querySelector('.nav button[data-topic="arithmetic"]'));
+if(!loadState()){
+  generate();
+} else {
+  // loaded
+  $('status') && ($('status').textContent = 'Session loaded');
+}
+
+// Pindahkan event binding topic ke sidebar mobile juga
+document.addEventListener('DOMContentLoaded', ()=>{
+  sidebarMobile.addEventListener('click',e=>{
+    if(e.target.dataset && e.target.dataset.topic){
+      setActiveTopic(e.target.dataset.topic, e.target);
+      closeSidebar();
+      saveStateDebounced();
+    }
+  });
+});
+</script>
+</body>
+</html>
