@@ -45,8 +45,8 @@ Generator Matematika 2025 v1 adalah aplikasi berbasis web single-file buatan **X
 - CSS3 (custom styling + responsive design)
 - JavaScript murni (tanpa framework eksternal)
 
-## 📄 Lisensi
-Proyek ini dilisensikan di bawah **MIT License**. Lihat [LICENSE](LICENSE) untuk detail.
+## 📄 Lisensi 
+ Lihat [LICENSE](LICENSE) untuk detail.
 
 ---
 
